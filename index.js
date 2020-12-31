@@ -1,10 +1,17 @@
 const express = require("express");
 const path = require("path");
+const app = express();
 const PORT = process.env.PORT || 5000;
+// const http = require("http").Server(app);
+// const io = require("socket.io")(http);
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.get("/", (request, response) => response.render("index"));
 
-express()
-  .use(express.static(path.join(__dirname, "public")))
-  .set("views", path.join(__dirname, "views"))
-  .set("view engine", "ejs")
-  .get("/", (request, response) => response.render("index"))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const io = require("socket.io")(server);
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+});
