@@ -1,3 +1,14 @@
 body {
   background-color: rgb(249, 214, 214);
 }
+/* Center a div from https://stackoverflow.com/questions/953918/how-to-align-a-div-to-the-middle-horizontally-width-of-the-page */
+#player {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); /*for IE 9 */
+  -webkit-transform: translate(-50%, -50%); /*for Safari*/
+  width: 50%;
+  height: 50%;
+}
