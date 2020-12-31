@@ -11,7 +11,11 @@ app.get("/", (request, response) => response.render("index"));
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = require("socket.io")(server);
-var users = io.on("connection", (socket) => {
+io.on("connection", (socket) => {
   console.log("user connected");
   console.log(socket.server.engine.clientsCount);
+  socket.on("change", (arg) => {
+    console.log("server", arg);
+    io.emit("change", arg);
+  });
 });

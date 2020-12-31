@@ -30,9 +30,19 @@
     </nav>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
-
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+      var socket = io();
       // 2. This code loads the IFrame Player API code asynchronously.
+      socket.on("change", (arg) => {
+        if (arg == 1) {
+          player.playVideo();
+        } else if (arg == 2) {
+          player.pauseVideo();
+        } else if (arg == 3) {
+        }
+        console.log(arg);
+      });
       var tag = document.createElement("script");
 
       tag.src = "https://www.youtube.com/iframe_api";
@@ -53,28 +63,15 @@
           },
         });
       }
-
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         event.target.playVideo();
         console.log("video ready");
       }
-
       // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
       var done = false;
       function onPlayerStateChange(event) {
-        // if (event.data == YT.PlayerState.PLAYING && !done) {
-        //   //   setTimeout(stopVideo, 6000);
-        //   //   done = true;
-        //   console.log("playing");
-        // } else if (event.data == YT.PlayerState.PAUSED && !done) {
-        //   console.log("paused");
-        // } else if (done == true) {
-        //   console.log("stopped");
-        // }
-        console.log(player.getPlayerState());
+        socket.emit("change", player.getPlayerState());
       }
       function stopVideo() {
         console.log("video stopped");
@@ -99,9 +96,8 @@
       crossorigin="anonymous"
     ></script>
     <!-- <script src="/socket.io/socket.io.js"></script> -->
-    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-      var socket = io();
+      //   var socket = io();
     </script>
   </body>
 </html>
