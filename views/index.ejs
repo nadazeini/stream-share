@@ -35,14 +35,18 @@
       var socket = io();
       // 2. This code loads the IFrame Player API code asynchronously.
       socket.on("change", (arg) => {
-        if (arg == 1) {
+        console.log("status ", arg.status, "time ", arg.time);
+        console.log(player.getCurrentTime());
+        if (arg.status == 1 || arg.status == 5) {
           player.playVideo();
-        } else if (arg == 2) {
+        } else if (arg.status == 2) {
           player.pauseVideo();
-        } else if (arg == 3) {
         }
-        console.log(arg);
+        if (Math.abs(arg.time - player.getCurrentTime()) > 1) {
+          player.seekTo(arg.time);
+        }
       });
+
       var tag = document.createElement("script");
 
       tag.src = "https://www.youtube.com/iframe_api";
@@ -69,14 +73,11 @@
         console.log("video ready");
       }
       // 5. The API calls this function when the player's state changes.
-      var done = false;
       function onPlayerStateChange(event) {
-        socket.emit("change", player.getPlayerState());
-      }
-      function stopVideo() {
-        console.log("video stopped");
-        done = true;
-        player.stopVideo();
+        socket.emit("change", {
+          status: player.getPlayerState(),
+          time: player.getCurrentTime(),
+        });
       }
     </script>
 
@@ -95,9 +96,5 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
-    <script type="text/javascript">
-      //   var socket = io();
-    </script>
   </body>
 </html>

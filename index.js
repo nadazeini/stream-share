@@ -15,7 +15,6 @@ io.on("connection", (socket) => {
   console.log("user connected");
   console.log(socket.server.engine.clientsCount);
   socket.on("change", (arg) => {
-    console.log("server", arg);
-    io.emit("change", arg);
+    io.emit("change", { status: arg.status, time: arg.time });
   });
 });
